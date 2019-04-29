@@ -184,6 +184,10 @@ describe('Job', () => {
       }, {skipImmediate: true});
       expect(job.attrs.nextRunAt).to.be.a(Date);
       expect(moment(job.attrs.nextRunAt).format('YYYY-MM-DDTHH:mm:ss')).to.eql(nextHour.format('YYYY-MM-DDTHH:mm:ss'));
+
+      job.attrs.lastRunAt = moment(job.attrs.nextRunAt).toDate();
+      job.computeNextRunAt();
+      expect(moment(job.attrs.nextRunAt).format('YYYY-MM-DDTHH:mm:ss')).to.eql(moment(nextHour).add(1, 'day').format('YYYY-MM-DDTHH:mm:ss'));
     });
     it('sets nextRunAt correctly using timezone (GMT-14)', () => {
       moment.tz.setDefault('Etc/UTC');
@@ -200,6 +204,10 @@ describe('Job', () => {
       }, {skipImmediate: true});
       expect(job.attrs.nextRunAt).to.be.a(Date);
       expect(moment(job.attrs.nextRunAt).format('YYYY-MM-DDTHH:mm:ss')).to.eql(nextHour.format('YYYY-MM-DDTHH:mm:ss'));
+
+      job.attrs.lastRunAt = moment(job.attrs.nextRunAt).toDate();
+      job.computeNextRunAt();
+      expect(moment(job.attrs.nextRunAt).format('YYYY-MM-DDTHH:mm:ss')).to.eql(moment(nextHour).add(1, 'day').format('YYYY-MM-DDTHH:mm:ss'));
     });
     it('sets nextRunAt correctly using timezone (GMT+12)', () => {
       moment.tz.setDefault('Etc/UTC');
@@ -216,6 +224,10 @@ describe('Job', () => {
       }, {skipImmediate: true});
       expect(job.attrs.nextRunAt).to.be.a(Date);
       expect(moment(job.attrs.nextRunAt).format('YYYY-MM-DDTHH:mm:ss')).to.eql(nextHour.format('YYYY-MM-DDTHH:mm:ss'));
+
+      job.attrs.lastRunAt = moment(job.attrs.nextRunAt).toDate();
+      job.computeNextRunAt();
+      expect(moment(job.attrs.nextRunAt).format('YYYY-MM-DDTHH:mm:ss')).to.eql(moment(nextHour).add(1, 'day').format('YYYY-MM-DDTHH:mm:ss'));
     });
   });
 
