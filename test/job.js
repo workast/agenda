@@ -126,6 +126,9 @@ describe('Job', () => {
   });
 
   describe('rrule', () => {
+    /**
+     * @type {Job}
+     */
     let job;
     beforeEach(() => {
       job = new Job();
@@ -165,6 +168,54 @@ describe('Job', () => {
     });
     it('returns the job', () => {
       expect(job.rrule({freq: RRule.DAILY})).to.be(job);
+    });
+    it('sets nextRunAt correctly using timezone (UTC)', () => {
+      moment.tz.setDefault('Etc/UTC');
+      const tzid = 'Etc/UTC';
+      const nextHour = moment().add(1, 'hour').minute(0).second(0);
+      const userNextHour = nextHour.clone().tz(tzid);
+      job.rrule({
+        freq: RRule.DAILY,
+        interval: 1,
+        tzid,
+        byhour: Number(userNextHour.format('H')),
+        byminute: 0,
+        bysecond: 0
+      }, {skipImmediate: true});
+      expect(job.attrs.nextRunAt).to.be.a(Date);
+      expect(moment(job.attrs.nextRunAt).format('YYYY-MM-DDTHH:mm:ss')).to.eql(nextHour.format('YYYY-MM-DDTHH:mm:ss'));
+    });
+    it('sets nextRunAt correctly using timezone (GMT-14)', () => {
+      moment.tz.setDefault('Etc/UTC');
+      const tzid = 'Etc/GMT-14';
+      const nextHour = moment().add(1, 'hour').minute(0).second(0);
+      const userNextHour = nextHour.clone().tz(tzid);
+      job.rrule({
+        freq: RRule.DAILY,
+        interval: 1,
+        tzid,
+        byhour: Number(userNextHour.format('H')),
+        byminute: 0,
+        bysecond: 0
+      }, {skipImmediate: true});
+      expect(job.attrs.nextRunAt).to.be.a(Date);
+      expect(moment(job.attrs.nextRunAt).format('YYYY-MM-DDTHH:mm:ss')).to.eql(nextHour.format('YYYY-MM-DDTHH:mm:ss'));
+    });
+    it('sets nextRunAt correctly using timezone (GMT+12)', () => {
+      moment.tz.setDefault('Etc/UTC');
+      const tzid = 'Etc/GMT+12';
+      const nextHour = moment().add(1, 'hour').minute(0).second(0);
+      const userNextHour = nextHour.clone().tz(tzid);
+      job.rrule({
+        freq: RRule.DAILY,
+        interval: 1,
+        tzid,
+        byhour: Number(userNextHour.format('H')),
+        byminute: 0,
+        bysecond: 0
+      }, {skipImmediate: true});
+      expect(job.attrs.nextRunAt).to.be.a(Date);
+      expect(moment(job.attrs.nextRunAt).format('YYYY-MM-DDTHH:mm:ss')).to.eql(nextHour.format('YYYY-MM-DDTHH:mm:ss'));
     });
   });
 
