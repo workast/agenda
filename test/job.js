@@ -215,7 +215,6 @@ describe('Job', () => {
         bysecond: 0
       }, {skipImmediate: true});
       expect(job.attrs.nextRunAt).to.be.a(Date);
-      console.log(job.attrs.nextRunAt);
       expect(moment(job.attrs.nextRunAt).format('YYYY-MM-DDTHH:mm:ss')).to.eql(nextHour.format('YYYY-MM-DDTHH:mm:ss'));
     });
   });
